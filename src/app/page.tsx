@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 import React from 'react';
 import ProductCard from '@/components/ProductCard';
 import products from '@/data/products.json';
@@ -23,26 +22,31 @@ const HomePage = () => {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold text-center mb-8">
+    <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Hero / Title */}
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-8">
         Welcome to Our Store
       </h1>
+
+      {/* Products Grid */}
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8"
         variants={container}
         initial="hidden"
         animate="show"
       >
-        {products.slice(0, 3).map((product) => (
+        {products.slice(0, 4).map((product) => (
           <motion.div key={product.id} variants={item}>
             <ProductCard product={product} />
           </motion.div>
         ))}
       </motion.div>
+
+      {/* View All Products Button */}
       <div className="text-center mt-8">
         <Link
           href="/products"
-          className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition-colors"
+          className="inline-block bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition-colors text-sm sm:text-base md:text-lg"
         >
           View All Products
         </Link>
