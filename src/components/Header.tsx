@@ -3,12 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { ShoppingCartIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '@/lib/store';
 
 const Header = () => {
   const items = useCartStore((state) => state.items);
   const [isClient, setIsClient] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -23,11 +24,14 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white shadow-md">
-      <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+    <header className="bg-white shadow-md fixed w-full z-50">
+      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        {/* Logo */}
         <Link href="/" className="text-2xl font-bold text-gray-800">
           My E-Commerce
         </Link>
+
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6">
           <Link href="/" className="text-gray-600 hover:text-gray-800">
             Home
@@ -39,8 +43,11 @@ const Header = () => {
             About Us
           </Link>
         </nav>
+
+        {/* Right Section */}
         <div className="flex items-center space-x-4">
-          <form onSubmit={handleSearch} className="relative">
+          {/* Search */}
+          <form onSubmit={handleSearch} className="relative hidden sm:block">
             <input
               type="text"
               name="search"
@@ -48,6 +55,8 @@ const Header = () => {
               className="px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </form>
+
+          {/* Cart */}
           <Link href="/cart" className="relative">
             <ShoppingCartIcon className="h-6 w-6 text-gray-600" />
             {isClient && items.length > 0 && (
@@ -56,8 +65,42 @@ const Header = () => {
               </span>
             )}
           </Link>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden focus:outline-none"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <XMarkIcon className="h-6 w-6 text-gray-600" /> : <Bars3Icon className="h-6 w-6 text-gray-600" />}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden bg-white shadow-md">
+          <nav className="flex flex-col px-4 py-4 space-y-3">
+            <Link href="/" className="text-gray-600 hover:text-gray-800">
+              Home
+            </Link>
+            <Link href="/products" className="text-gray-600 hover:text-gray-800">
+              Products
+            </Link>
+            <Link href="/about" className="text-gray-600 hover:text-gray-800">
+              About Us
+            </Link>
+            {/* Mobile Search */}
+            <form onSubmit={handleSearch} className="mt-2">
+              <input
+                type="text"
+                name="search"
+                placeholder="Search..."
+                className="w-full px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </form>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };
